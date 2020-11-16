@@ -1,0 +1,3 @@
+graft eco_fashion_project
+global-exclude *.py[cod] __pycache__ *.so *.ipynb
+recursive-exclude  eco_fashion_project/jupy *
