@@ -1,3 +1,5 @@
+from eco_fashion_project.data import get_data
+
 try:
     from PIL import Image
 except ImportError:
@@ -20,7 +22,9 @@ def ocr_ext(filename):
     return text
 
 if __name__ == "__main__":
+    img_used = get_data('images.png')
+
     print("ocr_core (image_to_string):")
-    print(ocr_core('..\data\label_composition_images\images.png'))
+    print(ocr_core(img_used))
     print("ocr_ext (image_to_data):")
-    print(ocr_ext('..\data\label_composition_images\images.png'))
+    print(ocr_ext(img_used))
