@@ -9,3 +9,8 @@ black
 yapf
 python-gitlab
 twine
+datetime
+pytesseract
+PIL
+#cv2
+#glob
