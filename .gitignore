@@ -12,4 +12,4 @@ groupama/data/base_pno.*
 /raw_data/
 *.jpg
 *.jpeg
-*.png
+#*.png

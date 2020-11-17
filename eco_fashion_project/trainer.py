@@ -21,6 +21,6 @@ def ocr_ext(filename):
 
 if __name__ == "__main__":
     print("ocr_core (image_to_string):")
-    print(ocr_core('data/label_composition_images/images-3.jpg'))
+    print(ocr_core('..\data\label_composition_images\images.png'))
     print("ocr_ext (image_to_data):")
-    print(ocr_ext('data/label_composition_images/images-3.jpg'))
+    print(ocr_ext('..\data\label_composition_images\images.png'))
