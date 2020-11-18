@@ -12,4 +12,5 @@ twine
 tesseract
 pytesseract
 Pillow
-
+numpy
+opencv-python
