@@ -2,14 +2,10 @@
 # Copyright (C) 2018 Jean Bizot <jean@styckr.io>
 """ Main lib for eco_fashion_project Project
 """
-
 from os.path import split
 import pandas as pd
 import datetime
-
 pd.set_option('display.width', 200)
-
-
 def clean_data(data):
     """ clean data
     """
@@ -46,8 +42,6 @@ def clean_data(data):
              7: '1/trimestre', 8: 'Less', 9: 'Never'}
     data.loc[:, 'Frequency'] = data['Frequency'].map(drows)
     return data
-
-
 if __name__ == '__main__':
     # For introspections purpose to quickly get this functions on ipython
     import eco_fashion_project
