@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import cv2
+import pandas as pd
 
 def get_data(filename):
     root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,3 +44,65 @@ def preprocessing_image(image):
     #definition sharp(image):
     #sharp= cv2.bilateralFilter(deskew,9,75,75)
     return deskew
+
+def get_fibre_list(filename):
+    root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    fb_path = os.path.join(root_path, 'eco_fashion_project', 'data', filename)
+
+    fb_keys = pd.read_csv(fb_path)
+    fibres_list = fb_keys['Material'].tolist()
+
+    return fibres_list
+
+def get_nylon_group(fibres_list):
+    nylon_group = [s for s in fibres_list if "nylon" in s or "polyamide" in s]
+    return nylon_group
+
+def get_polyester_group(fibres_list):
+    polyester_group = [s for s in fibres_list if "polyester" in s]
+    return polyester_group
+
+def get_linen_group(fibres_list):
+    linen_group = [s for s in fibres_list if "linen" in s]
+    return linen_group
+
+def get_hemp_group(fibres_list):
+    hemp_group = [s for s in fibres_list if "hemp" in s]
+    return hemp_group
+
+def get_cotton_group(fibres_list):
+    cotton_group = [s for s in fibres_list if "cotton" in s]
+    return cotton_group
+
+def get_wool_group(fibres_list):
+    wool_group = [s for s in fibres_list if "wool" in s]
+    return wool_group
+
+def get_viscose_group(fibres_list):
+    viscose_group = [s for s in fibres_list if "viscose" in s]
+    return viscose_group
+
+def get_leather_group(fibres_list):
+    leather_group = [s for s in fibres_list if "leather" in s]
+    return leather_group
+
+def get_multi_fb_group_list(fibres_list):
+    nylon_group = get_nylon_group(fibres_list)
+    polyester_group = get_polyester_group(fibres_list)
+    linen_group = get_linen_group(fibres_list)
+    hemp_group = get_hemp_group(fibres_list)
+    cotton_group = get_cotton_group(fibres_list)
+    wool_group = get_wool_group(fibres_list)
+    viscose_group = get_viscose_group(fibres_list)
+    leather_group = get_leather_group(fibres_list)
+
+    multi_fb_group_list = [nylon_group, polyester_group, linen_group, hemp_group, cotton_group, wool_group, viscose_group, leather_group]
+    return multi_fb_group_list
+
+def get_rest_group(fibres_list):
+    rest_group = fibres_list
+    multi_fb_group_list = get_multi_fb_group_list(fibres_list)
+    for group in multi_fb_group_list:
+        rest_group = [s for s in rest_group if s not in group]
+
+    return rest_group
