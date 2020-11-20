@@ -1,5 +1,8 @@
-from eco_fashion_project.data import get_data, preprocessing_image
+from eco_fashion_project.data import get_data, preprocessing_image, get_fibre_list, get_multi_fb_group_list, get_rest_group
 import os
+import re
+import pandas as pd
+
 
 try:
     from PIL import Image
@@ -27,20 +30,81 @@ def ocr_ext(filename):
     return text
 '''
 
+def split_lines(text):
+    text_per_line = text.splitlines()
+    return text_per_line
+
+def get_matches(ocr_splitted, fibres_list):
+    all_matches = []
+    for fibre in fibres_list:
+        matching = [s.lower() for s in ocr_splitted if fibre in s.lower()]
+        if matching:
+            matched = [fibre, matching]
+            all_matches.append(matched)
+
+    all_matches_df = pd.DataFrame(all_matches)
+    return all_matches_df
+
+def get_fiber_pct(df, fibres_list):
+    if not df.empty:
+        ind_df = df.set_index(0)
+        multi_fb_group_list = get_multi_fb_group_list(fibres_list)
+        rest_group = get_rest_group(fibres_list)
+
+        tag_info = pd.DataFrame(columns = ["fiber", "percentage"])
+
+        for group in multi_fb_group_list:
+            if df[0].isin(group).any() == True:
+                grouped_fibres = df[0][df[0].isin(group)]
+
+                fb_key = max(grouped_fibres, key=len)
+                if fb_key == "polyamide" and grouped_fibres.iloc[0] == 'nylon':
+                    fb_key = 'nylon'
+
+                pct = get_pct(ind_df, fb_key)
+                tag_info.loc[len(tag_info)] = [fb_key,pct]
+
+        if df[0].isin(rest_group).any() == True:
+            for match in df[0][df[0].isin(rest_group)]:
+                fb_key = match
+                pct = get_pct(ind_df, fb_key)
+                tag_info.loc[len(tag_info)] = [fb_key,pct]
+
+        return tag_info
+
+def get_pct(ind_df, fb_key):
+    int_tag_lines = ind_df.loc[fb_key][1]
+    pt = re.search(r'((\d+)[%])',int_tag_lines[0])
+    if pt:
+        pct = pt.group(0)
+    else:
+        pct = '%'
+
+    return pct
+
+
 if __name__ == "__main__":
 
     root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     img_folder_path = os.path.join(root_path, 'raw_data', 'label_composition_images')
     images = os.listdir(img_folder_path)
+    fibres_list = get_fibre_list('fibre_cleanedx4.csv')
 
     print("ocr_core (image_to_string):")
     for image in images:
         #image = 'IMG_1378.JPG'
         img_used = get_data(image)
         img_preproc = preprocessing_image(img_used)
-        print(f"{image}:")
-        print(ocr_core(img_preproc))
+        ocr_result = ocr_core(img_preproc)
+        ocr_splitted = split_lines(ocr_result)
+
+        print(f"OCR split per line: {image}:")
+        print(ocr_splitted)
         '''
         print("ocr_ext (image_to_data):")
         print(ocr_ext(img_preproc))
         '''
+        all_matches_df = get_matches(ocr_splitted, fibres_list)
+        tag_info = get_fiber_pct(all_matches_df, fibres_list)
+        print(f"tag info for image: {image}:")
+        print(tag_info)
