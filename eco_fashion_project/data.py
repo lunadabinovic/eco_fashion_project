@@ -11,7 +11,7 @@ def get_data(filename):
 
 def preprocessing_image(image):
     #image = cv2.imread('../raw_data/label_composition_images/IMG_1378.JPG')
-    image = cv2.imread(image)
+    image = cv2.imread(image) #cv2.CV_LOAD_IMAGE_COLOR)
     grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     noise = cv2.medianBlur(grayscale,5)
     #threshold = cv2.threshold(noise, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
