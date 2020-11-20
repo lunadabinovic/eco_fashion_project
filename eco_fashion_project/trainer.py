@@ -1,6 +1,6 @@
-from eco_fashion_project.data import get_data, preprocessing_image, get_fibre_list, get_multi_fb_group_list, get_rest_group
+from eco_fashion_project.data import get_data, preprocessing_image, get_fibre_df, get_fibre_list, get_multi_fb_group_list, get_rest_group
+from eco_fashion_project.utils import get_pct, percentages_to_float, check_100_pct, get_score
 import os
-import re
 import pandas as pd
 
 
@@ -45,6 +45,7 @@ def get_matches(ocr_splitted, fibres_list):
     all_matches_df = pd.DataFrame(all_matches)
     return all_matches_df
 
+
 def get_fiber_pct(df, fibres_list):
     if not df.empty:
         ind_df = df.set_index(0)
@@ -72,15 +73,16 @@ def get_fiber_pct(df, fibres_list):
 
         return tag_info
 
-def get_pct(ind_df, fb_key):
-    int_tag_lines = ind_df.loc[fb_key][1]
-    pt = re.search(r'((\d+)[%])',int_tag_lines[0])
-    if pt:
-        pct = pt.group(0)
-    else:
-        pct = '%'
 
-    return pct
+def get_final_score(fiber_score_df, df):
+    if df is not None:
+        tag_score_df = df.set_index('fiber')
+        tag_score_df['share'] = percentages_to_float(df)
+        tag_score_df['score'] = get_score(fiber_score_df, df)
+        tag_score_df['share_score'] = tag_score_df['share'] * tag_score_df['score']
+        sust_score = round(tag_score_df.sum(axis = 0, skipna = True)['share_score'],3)
+        return sust_score
+
 
 
 if __name__ == "__main__":
@@ -89,11 +91,14 @@ if __name__ == "__main__":
     img_folder_path = os.path.join(root_path, 'raw_data', 'label_composition_images')
     images = os.listdir(img_folder_path)
     images = [image for image in images if not image.startswith(".")]
-    fibres_list = get_fibre_list('fibre_cleanedx4.csv')
+
+    fb_df = get_fibre_df('fibre_cleanedx4.csv')
+    fiber_score_df = fb_df.set_index('Material')
+    fibres_list = get_fibre_list(fb_df)
 
     print("ocr_core (image_to_string):")
     for image in images:
-        #image = 'IMG_1378.JPG'
+        #image = 'IMG_1388.JPG'
         img_used = get_data(image)
         img_preproc = preprocessing_image(img_used)
         ocr_result = ocr_core(img_preproc)
@@ -109,3 +114,8 @@ if __name__ == "__main__":
         tag_info = get_fiber_pct(all_matches_df, fibres_list)
         print(f"tag info for image: {image}:")
         print(tag_info)
+
+        percentage_list = percentages_to_float(tag_info)
+        check_100_pct(percentage_list)
+        final_score = get_final_score(fiber_score_df, tag_info)
+        print(f"sustainability score for image: {image}: {final_score}")
