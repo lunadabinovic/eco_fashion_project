@@ -45,13 +45,14 @@ def preprocessing_image(image):
     #sharp= cv2.bilateralFilter(deskew,9,75,75)
     return deskew
 
-def get_fibre_list(filename):
+def get_fibre_df(filename):
     root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fb_path = os.path.join(root_path, 'eco_fashion_project', 'data', filename)
+    fb_df = pd.read_csv(fb_path)
+    return fb_df
 
-    fb_keys = pd.read_csv(fb_path)
-    fibres_list = fb_keys['Material'].tolist()
-
+def get_fibre_list(fb_df):
+    fibres_list = fb_df['Material'].tolist()
     return fibres_list
 
 def get_nylon_group(fibres_list):
