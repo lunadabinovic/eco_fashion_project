@@ -88,6 +88,7 @@ if __name__ == "__main__":
     root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     img_folder_path = os.path.join(root_path, 'raw_data', 'label_composition_images')
     images = os.listdir(img_folder_path)
+    images = [image for image in images if not image.startswith(".")]
     fibres_list = get_fibre_list('fibre_cleanedx4.csv')
 
     print("ocr_core (image_to_string):")
