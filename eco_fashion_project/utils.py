@@ -36,7 +36,7 @@ def percentages_to_float(df):
 
 def check_100_pct(percentage_list):
     if sum(percentage_list) != 1.0:
-        print("Please check the composition of the label: percentages do not add up to 100%")
+        return "Please check the composition of the label: percentages do not add up to 100%"
     pass
 
 

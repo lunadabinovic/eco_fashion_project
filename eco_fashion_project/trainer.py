@@ -116,6 +116,6 @@ if __name__ == "__main__":
         print(tag_info)
 
         percentage_list = percentages_to_float(tag_info)
-        check_100_pct(percentage_list)
+        print(check_100_pct(percentage_list))
         final_score = get_final_score(fiber_score_df, tag_info)
         print(f"sustainability score for image: {image}: {final_score}")
