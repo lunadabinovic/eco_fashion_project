@@ -30,13 +30,18 @@ st.markdown("# CloE/ Sustainaholic")
 st.write("Please upload your tag")
 
 
-
 ## user uploades an image and the model converts it to a string
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
 buffer =  st.file_uploader("Choose a JPG file" ,type="JPG")
 
 temp_file = NamedTemporaryFile(delete=False)
+
+## prints the image
+file_bytes = np.asarray(bytearray(buffer.read()), dtype=np.uint8)
+opencv_image = cv2.imdecode(file_bytes, 1)
+st.image(opencv_image, channels="BGR", width= 160)
+
 
 if buffer:
     temp_file.write(buffer.getvalue())
@@ -65,6 +70,7 @@ if buffer:
 ## gets all the matches in a dataframe
     all_matches_df = get_matches(ocr_splited, fibres_list)
 
+
 ## gets the tag info with percentages in a dataframne(columns = fibre and prencentages)
     tag_info = get_fiber_pct(all_matches_df,fibres_list)
 
@@ -79,22 +85,41 @@ if buffer:
     final_score = get_final_score(fiber_score_df, tag_info)
     st.write('The (initial) sustainability score is ', final_score)
 
+## function for dropdown
+    def index(start = 0):
+        i = start
+        while (i < len(tag_info)) == True:
+            option = st.multiselect('Fiber',
+                (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
+            #st.write('You selected:', option)
 
-    user_input = st.text_input("Are these the correct components? yes or no?")
-    if user_input == 'yes':
-        st.write('Your Final score is: ')
-    else:
+
+            numbers = list(range(0,101))
+            numbers_list = []
+            for number in numbers:
+                numbers_list.append(str(number)+'%')
+            option = st.multiselect('Percentage',
+                    (numbers_list), list(tag_info['percentage'])[i])
+            #st.write('You selected:', option)
+
+            i += 1
+
+    st.write("Are these the correct components and the percentages?")
+    if st.button('Yes'):
+      st.write('Your Final score is: ')
+    elif st.button('No'):
         st.write('Please make the correct changes')
+        index(start = 0)
 
-    for tag in tag_info_show:
-    #i = 0
-        option = st.selectbox('Fiber',
-        (list(tag_info_show['fiber'])))
-        st.write('You selected:', option)
+        if st.button('Add another component'):
+            st.write('heb')
+        elif st.button('Calculate my final score'):
+            st.write('hey')
 
 
-number = st.number_input('Insert a number')
-st.write('The current number is ', number)
+
+
+
 
     #i = 0
     #option = st.selectbox('Fiber',
@@ -102,6 +127,6 @@ st.write('The current number is ', number)
     #st.write('You selected:', option)
 
 
+            #number = st.number_input('Insert a number')
+            #st.write('The current number is ', number)
 
-#st.write(pd.DataFrame{""})
-#st.DataFrame({tag_})
