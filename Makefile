@@ -63,4 +63,4 @@ pypi:
 #      RUN APP
 # ----------------------------------
 run_streamlit:
-    streamlit run app_streamlit.py
+	streamlit run app_streamlit.py
