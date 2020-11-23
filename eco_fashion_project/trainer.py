@@ -1,4 +1,4 @@
-from eco_fashion_project.data import get_data, preprocessing_image, get_fibre_df, get_fibre_list, get_multi_fb_group_list, get_rest_group
+from eco_fashion_project.data import get_data, preprocessing_image, get_fibre_df, get_fibre_list, get_multi_fb_group_list, get_rest_group, get_brand_transp_df, get_brand_list
 from eco_fashion_project.utils import get_pct, percentages_to_float, check_100_pct, get_score
 import os
 import pandas as pd
@@ -83,6 +83,18 @@ def get_final_score(fiber_score_df, df):
         sust_score = round(tag_score_df.sum(axis = 0, skipna = True)['share_score'],3)
         return sust_score
 
+def get_overall_pct_brand_score(brand_score_df, brand):
+    '''returns a float equal to the overall percentage fashion transparency index of the brand'''
+    if brand:
+        overall_pct_brand_score = brand_score_df.loc[brand][11]
+        return overall_pct_brand_score
+
+def get_pct_brand_scores_per_section(brand_score_df, brand):
+    '''returns a Series of 5 floats equal to the percentages of the 5 sections of the fashion transparency index of the brand'''
+    if brand:
+        pct_brand_score_per_section = brand_score_df.loc[brand][1:11:2]
+        return pct_brand_score_per_section
+
 
 
 if __name__ == "__main__":
@@ -95,6 +107,9 @@ if __name__ == "__main__":
     fb_df = get_fibre_df('fibre_cleanedx4.csv')
     fiber_score_df = fb_df.set_index('Material')
     fibres_list = get_fibre_list(fb_df)
+
+    brand_score_df = get_brand_transp_df('brands_final_score.xlsx')
+    brand_list = get_brand_list(brand_score_df)
 
     print("ocr_core (image_to_string):")
     for image in images:
@@ -119,3 +134,9 @@ if __name__ == "__main__":
         print(check_100_pct(percentage_list))
         final_score = get_final_score(fiber_score_df, tag_info)
         print(f"sustainability score for image: {image}: {final_score}")
+
+    print(f"Brand list: {brand_list}")
+    #brand = input("For which brand would you like to get the fashion transparency index scores? (Pick from brand_list)")
+    brand = 'Abercrombie & Fitch'
+    print(f"Overall brand score A&F (%): {get_overall_pct_brand_score(brand_score_df, brand)}")
+    print(f"Brand score per section A&F (%): {get_pct_brand_scores_per_section(brand_score_df, brand)}")
