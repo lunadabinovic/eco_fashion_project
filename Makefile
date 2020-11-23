@@ -58,3 +58,9 @@ pypi_test:
 
 pypi:
 	@twine upload dist/* -u lologibus2
+
+# ----------------------------------
+#      RUN APP
+# ----------------------------------
+run_streamlit:
+	streamlit run app_streamlit.py

@@ -51,7 +51,8 @@ if buffer:
     text = ocr_core(pp_image)
     ocr_splited= split_lines(text)
 
-    fb_df_test  = get_fibre_df('fibre_cleanedx5.csv')
+    fb_df_test = get_fibre_df('fibre_cleanedx5.csv')
+    fiber_score_df = fb_df_test.set_index('Material')
     fibres_list = get_fibre_list(fb_df_test)
 
 ## defining all the groupos with the functions from data.py
@@ -76,6 +77,13 @@ if buffer:
     tag_info_show = tag_info.assign(hack='').set_index('hack')
     st.write(tag_info_show)
 
+    percentage_list = percentages_to_float(tag_info)
+    st.write(check_100_pct(percentage_list))
+
+    #get the sustainability score
+    #WILL NEED TO BE ADAPTED IF THE USER CHANGED THE INPUT!
+    final_score = get_final_score(fiber_score_df, tag_info)
+    st.write('The (initial) sustainability score is ', final_score)
 
 ## function for dropdown
     def index(start = 0):
@@ -98,7 +106,7 @@ if buffer:
 
     st.write("Are these the correct components and the percentages?")
     if st.button('Yes'):
-        st.write('Your Final score is: ')
+      st.write('Your Final score is: ')
     elif st.button('No'):
         st.write('Please make the correct changes')
         index(start = 0)
@@ -122,9 +130,3 @@ if buffer:
             #number = st.number_input('Insert a number')
             #st.write('The current number is ', number)
 
-#fb_df = get_fibre_df('fibre_cleanedx5.csv')
- #       fiber_score_df = fb_df.set_index('Material')
-  #      fibres_list = get_fibre_list(fb_df)
-   #     percentage_list = percentages_to_float(tag_info)
-        #check_100_pct(percentage_list)
-    #    final_score = get_final_score(fiber_score_df, tag_info)
