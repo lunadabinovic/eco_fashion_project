@@ -96,6 +96,35 @@ def get_pct_brand_scores_per_section(brand_score_df, brand):
         #pct_brand_score_per_section = brand_score_df.loc[brand][1:11:2]
         return pct_brand_score_per_section
 
+def get_pct_brand_score_for_section_1(brand_score_df, brand):
+    '''returns a float equal to the percentage of the first section of the fashion transparency index of the brand'''
+    if brand:
+        pct_brand_score_for_section_1 = brand_score_df.loc[brand]["1. POLICY & COMMITMENTS"]
+        return pct_brand_score_for_section_1
+
+def get_pct_brand_score_for_section_2(brand_score_df, brand):
+    '''returns a float equal to the percentage of section 2 of the fashion transparency index of the brand'''
+    if brand:
+        pct_brand_score_for_section_2 = brand_score_df.loc[brand]["2. GOVERNANCE"]
+        return pct_brand_score_for_section_2
+
+def get_pct_brand_score_for_section_3(brand_score_df, brand):
+    '''returns a float equal to the percentage of section 3 of the fashion transparency index of the brand'''
+    if brand:
+        pct_brand_score_for_section_3 = brand_score_df.loc[brand]["3. TRACEABILITY"]
+        return pct_brand_score_for_section_3
+
+def get_pct_brand_score_for_section_4(brand_score_df, brand):
+    '''returns a float equal to the percentage of section 4 of the fashion transparency index of the brand'''
+    if brand:
+        pct_brand_score_for_section_4 = brand_score_df.loc[brand]["4. KNOW, SHOW & FIX"]
+        return pct_brand_score_for_section_4
+
+def get_pct_brand_score_for_section_5(brand_score_df, brand):
+    '''returns a float equal to the percentage of section 5 of the fashion transparency index of the brand'''
+    if brand:
+        pct_brand_score_for_section_5 = brand_score_df.loc[brand]["5. SPOTLIGHT ISSUES (CONDITIONS, CONSUMPTION, COMPOSITION, CLIMATE)"]
+        return pct_brand_score_for_section_5
 
 
 if __name__ == "__main__":
@@ -138,6 +167,7 @@ if __name__ == "__main__":
 
     print(f"Brand list: {brand_list}")
     #brand = input("For which brand would you like to get the fashion transparency index scores? (Pick from brand_list)")
-    brand = 'Abercrombie & Fitch'
+    #brand = 'Abercrombie & Fitch'
+    brand = "Versace"
     print(f"Overall brand score A&F (%): {get_overall_pct_brand_score(brand_score_df, brand)}")
     print(f"Brand score per section A&F (%): {get_pct_brand_scores_per_section(brand_score_df, brand)}")
