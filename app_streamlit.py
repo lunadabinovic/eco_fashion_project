@@ -39,9 +39,6 @@ st.markdown("<h1 style='text-align: center; color: DarkGreen; position: relative
 st.text("")
 st.text("")
 
-
-
-
 #background-image
 page_bg_img = '''
    <style>
@@ -164,6 +161,7 @@ if analysis == 'Homepage':
 
             i += 1
 
+
     def add_components(start = len(tag_info)):
         i = start
         # CHECK IF CHECKBOX CLICKED :
@@ -260,4 +258,3 @@ if analysis == 'About':
     st.write('Business Opportunities: Perhaps a functionality could be integrated where the user is asked\
     for or what they are looking to buy (ie: party dress, pants etc.) and is recommended different sustainable \
     sources/shops, to buy such an item.')
-
