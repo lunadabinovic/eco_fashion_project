@@ -169,5 +169,5 @@ if __name__ == "__main__":
     #brand = input("For which brand would you like to get the fashion transparency index scores? (Pick from brand_list)")
     #brand = 'Abercrombie & Fitch'
     brand = "Versace"
-    print(f"Overall brand score A&F (%): {get_overall_pct_brand_score(brand_score_df, brand)}")
-    print(f"Brand score per section A&F (%): {get_pct_brand_scores_per_section(brand_score_df, brand)}")
+    print(f"Overall brand score {brand} (%): {get_overall_pct_brand_score(brand_score_df, brand)}")
+    print(f"Brand score per section {brand} (%): {get_pct_brand_scores_per_section(brand_score_df, brand)}")
