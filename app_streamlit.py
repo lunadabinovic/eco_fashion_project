@@ -22,11 +22,17 @@ from eco_fashion_project.data import get_data, preprocessing_image, get_fibre_li
 get_fibre_df, get_nylon_group, get_polyester_group,get_linen_group,get_hemp_group,get_cotton_group,\
 get_wool_group,get_viscose_group,get_leather_group, get_multi_fb_group_list, get_rest_group
 
+from cofirm_button_hack import confirm_button_example, cache_on_button_press
+
 from eco_fashion_project.trainer import ocr_core, split_lines, get_matches, get_fiber_pct, get_pct, get_final_score
 from eco_fashion_project.utils import get_pct, percentages_to_float, check_100_pct, get_score
 
-st.markdown("# CloE/ Sustainaholic")
 
+
+image = Image.open('/Users/antonia/Desktop/Coding/logo_size_invert.jpg')
+st.image(image, use_column_width=False)
+
+st.markdown('# Sustainaholics')
 st.write("Please upload your tag")
 
 
@@ -43,7 +49,7 @@ opencv_image = cv2.imdecode(file_bytes, 1)
 st.image(opencv_image, channels="BGR", width= 160)
 
 
-if buffer:
+if buffer is not None:
     temp_file.write(buffer.getvalue())
 
 ## passing the image to our model
@@ -91,7 +97,7 @@ if buffer:
         while (i < len(tag_info)) == True:
             option = st.multiselect('Fiber',
                 (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
-            #st.write('You selected:', option)
+            st.write('You selected:', option)
 
 
             numbers = list(range(0,101))
@@ -105,16 +111,69 @@ if buffer:
             i += 1
 
     st.write("Are these the correct components and the percentages?")
-    if st.button('Yes'):
-      st.write('Your Final score is: ')
-    elif st.button('No'):
-        st.write('Please make the correct changes')
-        index(start = 0)
 
-        if st.button('Add another component'):
-            st.write('heb')
-        elif st.button('Calculate my final score'):
-            st.write('hey')
+    #yes = st.button('Yes')
+    #no = st.button('No')
+    #editing = False
+    #if yes:
+       # st.write('Your Final score is: ')
+    #elif no or editing:
+       #editing = True
+
+    st.write('Please make the correct changes')
+
+    index(start= 0)
+    st.write(option)
+
+
+    #ä@cache_on_button_press('Update')
+    #def update():
+      #  return True
+
+       # index(start= 0)
+
+
+
+
+           # option = st.multiselect('Fiber',
+            #       (list(fb_df_test['Material'])))
+
+          #  numbers = list(range(0,101))
+          #  numbers_list = []
+          #  for number in numbers:
+
+           #    numbers_list.append(str(number)+'%')
+           # option = st.multiselect('Percentage',
+           #       (numbers_list))
+
+      #  update()
+
+
+
+
+    #@cache_on_button_press('Authenticate')
+    # def authenticate(username, password):
+     #   return username == "buddha" and password == "s4msara"
+
+   # username = st.text_input('username')
+   #password = st.text_input('password')
+
+    #if authenticate(username, password):
+     #   st.success('You are authenticated!')
+     #   st.write(st.slider('Test widget')) # <- just to show that widgets work here
+    #else:
+       # st.error('The username or password you have entered is invalid.')
+
+
+
+    # add = st.button('Add another component')
+    #   score = st.button('Calculate my final score')
+
+
+     #   if add:
+     #       st.write('heb')
+      #  elif score:
+     #       st.write('hey')
 
 
 
