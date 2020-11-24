@@ -24,7 +24,8 @@ get_wool_group,get_viscose_group,get_leather_group, get_multi_fb_group_list, get
 get_brand_transp_df, get_brand_list
 
 from eco_fashion_project.trainer import ocr_core, split_lines, get_matches, get_fiber_pct, get_pct, get_final_score,\
-get_overall_pct_brand_score, get_pct_brand_scores_per_section
+get_overall_pct_brand_score, get_pct_brand_scores_per_section, get_pct_brand_score_for_section_1, get_pct_brand_score_for_section_2,\
+get_pct_brand_score_for_section_3, get_pct_brand_score_for_section_4, get_pct_brand_score_for_section_5
 from eco_fashion_project.utils import get_pct, percentages_to_float, check_100_pct, get_score
 
 st.markdown("# Sustainaholic")
@@ -94,8 +95,6 @@ if buffer:
         while (i < len(tag_info)) == True:
             option = st.multiselect('Fiber',
                 (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
-            #st.write('You selected:', option)
-            #ad_tag_info['fiber'][i] = option
             ad_fibres.append(option[0])
 
 
@@ -105,20 +104,16 @@ if buffer:
                 numbers_list.append(str(number)+'%')
             option = st.multiselect('Percentage',
                     (numbers_list), list(tag_info['percentage'])[i])
-            #st.write('You selected:', option)
-            #ad_tag_info['percentage'][i] = option
             ad_percentages.append(option[0])
 
             i += 1
 
     def add_components(start = len(tag_info)):
         i = start
-        # CHECK HOW CHECKBOX CLICKED :
+        # CHECK IF CHECKBOX CLICKED :
         #if i :
         option = st.multiselect('Fiber',
             (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
-        #st.write('You selected:', option)
-        #ad_tag_info['fiber'][i] = option
         ad_fibres.append(option[0])
 
 
@@ -128,16 +123,15 @@ if buffer:
             numbers_list.append(str(number)+'%')
         option = st.multiselect('Percentage',
                 (numbers_list), numbers_list[0], key=f"pct{i}")
-        #st.write('You selected:', option)
-        #ad_tag_info['percentage'][i] = option
         ad_percentages.append(option[0])
 
         #i += 1
 
-    #TO BE COMPLETED:
-    def add_input_field_and_checkbox(k):
-        add_components(start = len(tag_info))
-        k += 1
+
+    #TO BE COMPLETED: attention to infinite loop!
+    #def add_input_field_and_checkbox(k):
+        #add_components(start = len(tag_info))
+        #k += 1
         #if st.checkbox('Add another component', key=f"{k}")
 
 
@@ -147,7 +141,6 @@ if buffer:
         final_score = get_final_score(fiber_score_df, tag_info)
         st.write('The sustainability score is ', final_score)
     elif st.checkbox('No'):
-        #ad_tag_info = tag_info
         ad_fibres = []
         ad_percentages = []
         st.write('Please make the correct changes')
@@ -156,7 +149,6 @@ if buffer:
 
         if st.checkbox('Add another component', key=f"{k}"):
             add_components(start = len(tag_info))
-            #st.write('working?')
             # ADD ANOTHER COMPONENT IN A LOOP
             #add_input_field_and_checkbox(k)
 
@@ -171,16 +163,17 @@ if buffer:
             ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
             st.write('The sustainability score is ', ad_sust_score)
 
-            #st.write('hey')
-            # Change the entry at (row, col) to the given value
-            #tag_info.values[row][col] = value
 
     if st.checkbox('Show fashion transparency index for brand'):
         brand = st.multiselect('Brand',
             (brand_list), brand_list[0])
         st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
-        # TO BE COMPLETED
-        st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
+        st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
+        st.write("Brand score (%): section 2: ", get_pct_brand_score_for_section_2(brand_score_df, brand))
+        st.write("Brand score (%): section 3: ", get_pct_brand_score_for_section_3(brand_score_df, brand))
+        st.write("Brand score (%): section 4: ", get_pct_brand_score_for_section_4(brand_score_df, brand))
+        st.write("Brand score (%): section 5: ", get_pct_brand_score_for_section_5(brand_score_df, brand))
+        #st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
 
 
 
