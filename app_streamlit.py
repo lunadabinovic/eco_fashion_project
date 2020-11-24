@@ -160,78 +160,99 @@ if analysis == 'Homepage':
                     numbers_list.append(str(number)+'%')
                 option = st.multiselect('Percentage',
                     (numbers_list), list(tag_info['percentage'])[i])
+                ad_percentages.append(option[0])
+
+                i += 1
+
+        def add_components(start = len(tag_info)):
+            i = start
+            # CHECK IF CHECKBOX CLICKED :
+            #if i :
+            option = st.multiselect('Fiber',
+                (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
+            ad_fibres.append(option[0])
+
+
+            numbers = list(range(0,101))
+            numbers_list = []
+            for number in numbers:
+                numbers_list.append(str(number)+'%')
+            option = st.multiselect('Percentage',
+                    (numbers_list), numbers_list[0], key=f"pct{i}")
             ad_percentages.append(option[0])
 
-            i += 1
-
-    def add_components(start = len(tag_info)):
-        i = start
-        # CHECK IF CHECKBOX CLICKED :
-        #if i :
-        option = st.multiselect('Fiber',
-            (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
-        ad_fibres.append(option[0])
+            #i += 1
 
 
-        numbers = list(range(0,101))
-        numbers_list = []
-        for number in numbers:
-            numbers_list.append(str(number)+'%')
-        option = st.multiselect('Percentage',
-                (numbers_list), numbers_list[0], key=f"pct{i}")
-        ad_percentages.append(option[0])
-
-        #i += 1
+        #TO BE COMPLETED: attention to infinite loop!
+        #def add_input_field_and_checkbox(k):
+            #add_components(start = len(tag_info))
+            #k += 1
+            #if st.checkbox('Add another component', key=f"{k}")
 
 
-    #TO BE COMPLETED: attention to infinite loop!
-    #def add_input_field_and_checkbox(k):
-        #add_components(start = len(tag_info))
-        #k += 1
-        #if st.checkbox('Add another component', key=f"{k}")
+        st.write("Are these the correct components and percentages?")
+        if st.checkbox('Yes'):
+            #get the sustainability score
+            final_score = get_final_score(fiber_score_df, tag_info)
+            st.write('The sustainability score is ', final_score)
+        elif st.checkbox('No'):
+            ad_fibres = []
+            ad_percentages = []
+            st.write('Please make the correct changes')
+            index(start = 0)
+            k = 1
+
+            if st.checkbox('Add another component', key=f"{k}"):
+                add_components(start = len(tag_info))
+                # ADD ANOTHER COMPONENT IN A LOOP
+                #add_input_field_and_checkbox(k)
+
+            if st.button('Calculate my final score'):
+                d = {'fiber': ad_fibres, 'percentage': ad_percentages}
+                ad_tag_info = pd.DataFrame(data=d)
+                ad_tag_info_show = ad_tag_info.assign(hack='').set_index('hack')
+                st.write(ad_tag_info_show)
+
+                ad_percentage_list = percentages_to_float(ad_tag_info)
+                st.write(check_100_pct(ad_percentage_list))
+                ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
+                st.write('The sustainability score is ', ad_sust_score)
 
 
-    st.write("Are these the correct components and percentages?")
-    if st.checkbox('Yes'):
-        #get the sustainability score
-        final_score = get_final_score(fiber_score_df, tag_info)
-        st.write('The sustainability score is ', final_score)
-    elif st.checkbox('No'):
-        ad_fibres = []
-        ad_percentages = []
-        st.write('Please make the correct changes')
-        index(start = 0)
-        k = 1
+        if st.checkbox('Show fashion transparency index for brand'):
+            brand = st.multiselect('Brand',
+                (brand_list), brand_list[0])
+            st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
+            #st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
+            #st.write("Brand score (%): section 2: ", get_pct_brand_score_for_section_2(brand_score_df, brand))
+            #st.write("Brand score (%): section 3: ", get_pct_brand_score_for_section_3(brand_score_df, brand))
+            #st.write("Brand score (%): section 4: ", get_pct_brand_score_for_section_4(brand_score_df, brand))
+            #st.write("Brand score (%): section 5: ", get_pct_brand_score_for_section_5(brand_score_df, brand))
+            #st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
 
-        if st.checkbox('Add another component', key=f"{k}"):
-            add_components(start = len(tag_info))
-            # ADD ANOTHER COMPONENT IN A LOOP
-            #add_input_field_and_checkbox(k)
-
-        if st.button('Calculate my final score'):
-            d = {'fiber': ad_fibres, 'percentage': ad_percentages}
-            ad_tag_info = pd.DataFrame(data=d)
-            ad_tag_info_show = ad_tag_info.assign(hack='').set_index('hack')
-            st.write(ad_tag_info_show)
-
-            ad_percentage_list = percentages_to_float(ad_tag_info)
-            st.write(check_100_pct(ad_percentage_list))
-            ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
-            st.write('The sustainability score is ', ad_sust_score)
-
-
-    if st.checkbox('Show fashion transparency index for brand'):
-        brand = st.multiselect('Brand',
-            (brand_list), brand_list[0])
-        st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
-        st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
-        st.write("Brand score (%): section 2: ", get_pct_brand_score_for_section_2(brand_score_df, brand))
-        st.write("Brand score (%): section 3: ", get_pct_brand_score_for_section_3(brand_score_df, brand))
-        st.write("Brand score (%): section 4: ", get_pct_brand_score_for_section_4(brand_score_df, brand))
-        st.write("Brand score (%): section 5: ", get_pct_brand_score_for_section_5(brand_score_df, brand))
-        #st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
-
-
+    ## Graph visualisation
+            sec_1= get_pct_brand_score_for_section_1(brand_score_df, brand)
+            sec_2= get_pct_brand_score_for_section_2(brand_score_df, brand)
+            sec_3= get_pct_brand_score_for_section_3(brand_score_df, brand)
+            sec_4= get_pct_brand_score_for_section_4(brand_score_df, brand)
+            sec_5= get_pct_brand_score_for_section_5(brand_score_df, brand)
+            chart_dict = {"Policy & Commitments (%)":sec_1.iloc[0], "Governance (%)": sec_2.iloc[0], "Traceability (%)": sec_3.iloc[0], "Know, show, fix (%)": sec_4.iloc[0], "Spotlight Issues (%)**": sec_5.iloc[0]}
+            chart_matrix = np.zeros((5,5))
+            counter = 0
+            for k,v in chart_dict.items():
+                chart_matrix[counter,counter] = v
+                counter += 1
+            chart_dict_df = pd.DataFrame(chart_matrix, index = chart_dict.keys(), columns = chart_dict.keys())
+            st.bar_chart(chart_dict_df)
+            #st.write(chart_dict_df)
+            st.write("** Spotlight issues refer to: Conditions, Consumption, Climate, Composition")
+            ##For display in the same table
+            columns = list(chart_dict.keys())
+            values = list(chart_dict.values())
+            arr_len = len(values)
+            chart_df = pd.DataFrame(np.array(values, dtype=object).reshape(1, arr_len), columns=columns)
+            st.write(chart_df)
 
 
 
