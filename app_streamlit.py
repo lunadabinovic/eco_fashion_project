@@ -150,22 +150,17 @@ if analysis == 'Homepage':
                     (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
                 ad_fibres.append(option[0])
 
+
                 numbers = list(range(0,101))
                 numbers_list = []
                 for number in numbers:
                     numbers_list.append(str(number)+'%')
                 option = st.multiselect('Percentage',
-
                     (numbers_list), list(tag_info['percentage'])[i])
             ad_percentages.append(option[0])
 
             i += 1
 
-
-    #get the sustainability score
-    #WILL NEED TO BE ADAPTED IF THE USER CHANGED THE INPUT!
-    final_score = get_final_score(fiber_score_df, tag_info)
-    st.write('The (initial) sustainability score is ', final_score)
 
     def add_components(start = len(tag_info)):
         i = start
