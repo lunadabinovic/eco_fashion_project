@@ -106,3 +106,14 @@ def get_rest_group(fibres_list):
         rest_group = [s for s in rest_group if s not in group]
 
     return rest_group
+
+def get_brand_transp_df(filename):
+    root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    brand_path = os.path.join(root_path, 'eco_fashion_project', 'data', filename)
+    brand_df = pd.read_excel(brand_path)
+    brand_score_df = brand_df.set_index('Brand Name')
+    return brand_score_df
+
+def get_brand_list(brand_score_df):
+    brand_list = brand_score_df.index.values.tolist()
+    return brand_list
