@@ -86,13 +86,14 @@ def get_final_score(fiber_score_df, df):
 def get_overall_pct_brand_score(brand_score_df, brand):
     '''returns a float equal to the overall percentage fashion transparency index of the brand'''
     if brand:
-        overall_pct_brand_score = brand_score_df.loc[brand][11]
+        overall_pct_brand_score = brand_score_df.loc[brand]["FASHION TRANSPARENCY INDEX 2020 (%)"]
         return overall_pct_brand_score
 
 def get_pct_brand_scores_per_section(brand_score_df, brand):
     '''returns a Series of 5 floats equal to the percentages of the 5 sections of the fashion transparency index of the brand'''
     if brand:
-        pct_brand_score_per_section = brand_score_df.loc[brand][1:11:2]
+        pct_brand_score_per_section = brand_score_df.loc[brand]["1. POLICY & COMMITMENTS":"FASHION TRANSPARENCY INDEX 2020 (%)":2]
+        #pct_brand_score_per_section = brand_score_df.loc[brand][1:11:2]
         return pct_brand_score_per_section
 
 

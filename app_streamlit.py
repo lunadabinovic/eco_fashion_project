@@ -20,12 +20,14 @@ import pytesseract
 
 from eco_fashion_project.data import get_data, preprocessing_image, get_fibre_list,\
 get_fibre_df, get_nylon_group, get_polyester_group,get_linen_group,get_hemp_group,get_cotton_group,\
-get_wool_group,get_viscose_group,get_leather_group, get_multi_fb_group_list, get_rest_group
+get_wool_group,get_viscose_group,get_leather_group, get_multi_fb_group_list, get_rest_group,\
+get_brand_transp_df, get_brand_list
 
-from eco_fashion_project.trainer import ocr_core, split_lines, get_matches, get_fiber_pct, get_pct, get_final_score
+from eco_fashion_project.trainer import ocr_core, split_lines, get_matches, get_fiber_pct, get_pct, get_final_score,\
+get_overall_pct_brand_score, get_pct_brand_scores_per_section
 from eco_fashion_project.utils import get_pct, percentages_to_float, check_100_pct, get_score
 
-st.markdown("# CloE/ Sustainaholic")
+st.markdown("# Sustainaholic")
 
 st.write("Please upload your tag")
 
@@ -67,6 +69,11 @@ if buffer:
     multi_fb_group_list = get_multi_fb_group_list(fibres_list)
     rest_group = get_rest_group(fibres_list)
 
+## get brand scores
+    brand_score_df = get_brand_transp_df('brands_final_score.xlsx')
+    brand_list = get_brand_list(brand_score_df)
+
+
 ## gets all the matches in a dataframe
     all_matches_df = get_matches(ocr_splited, fibres_list)
 
@@ -80,10 +87,6 @@ if buffer:
     percentage_list = percentages_to_float(tag_info)
     st.write(check_100_pct(percentage_list))
 
-    #get the sustainability score
-    #WILL NEED TO BE ADAPTED IF THE USER CHANGED THE INPUT!
-    final_score = get_final_score(fiber_score_df, tag_info)
-    st.write('The (initial) sustainability score is ', final_score)
 
 ## function for dropdown
     def index(start = 0):
@@ -92,6 +95,8 @@ if buffer:
             option = st.multiselect('Fiber',
                 (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
             #st.write('You selected:', option)
+            #ad_tag_info['fiber'][i] = option
+            ad_fibres.append(option[0])
 
 
             numbers = list(range(0,101))
@@ -101,20 +106,81 @@ if buffer:
             option = st.multiselect('Percentage',
                     (numbers_list), list(tag_info['percentage'])[i])
             #st.write('You selected:', option)
+            #ad_tag_info['percentage'][i] = option
+            ad_percentages.append(option[0])
 
             i += 1
 
-    st.write("Are these the correct components and the percentages?")
-    if st.button('Yes'):
-      st.write('Your Final score is: ')
-    elif st.button('No'):
+    def add_components(start = len(tag_info)):
+        i = start
+        # CHECK HOW CHECKBOX CLICKED :
+        #if i :
+        option = st.multiselect('Fiber',
+            (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
+        #st.write('You selected:', option)
+        #ad_tag_info['fiber'][i] = option
+        ad_fibres.append(option[0])
+
+
+        numbers = list(range(0,101))
+        numbers_list = []
+        for number in numbers:
+            numbers_list.append(str(number)+'%')
+        option = st.multiselect('Percentage',
+                (numbers_list), numbers_list[0], key=f"pct{i}")
+        #st.write('You selected:', option)
+        #ad_tag_info['percentage'][i] = option
+        ad_percentages.append(option[0])
+
+        #i += 1
+
+    #TO BE COMPLETED:
+    def add_input_field_and_checkbox(k):
+        add_components(start = len(tag_info))
+        k += 1
+        #if st.checkbox('Add another component', key=f"{k}")
+
+
+    st.write("Are these the correct components and percentages?")
+    if st.checkbox('Yes'):
+        #get the sustainability score
+        final_score = get_final_score(fiber_score_df, tag_info)
+        st.write('The sustainability score is ', final_score)
+    elif st.checkbox('No'):
+        #ad_tag_info = tag_info
+        ad_fibres = []
+        ad_percentages = []
         st.write('Please make the correct changes')
         index(start = 0)
+        k = 1
 
-        if st.button('Add another component'):
-            st.write('heb')
-        elif st.button('Calculate my final score'):
-            st.write('hey')
+        if st.checkbox('Add another component', key=f"{k}"):
+            add_components(start = len(tag_info))
+            #st.write('working?')
+            # ADD ANOTHER COMPONENT IN A LOOP
+            #add_input_field_and_checkbox(k)
+
+        if st.button('Calculate my final score'):
+            d = {'fiber': ad_fibres, 'percentage': ad_percentages}
+            ad_tag_info = pd.DataFrame(data=d)
+            ad_tag_info_show = ad_tag_info.assign(hack='').set_index('hack')
+            st.write(ad_tag_info_show)
+
+            ad_percentage_list = percentages_to_float(ad_tag_info)
+            st.write(check_100_pct(ad_percentage_list))
+            ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
+            st.write('The sustainability score is ', ad_sust_score)
+
+            #st.write('hey')
+            # Change the entry at (row, col) to the given value
+            #tag_info.values[row][col] = value
+
+    if st.checkbox('Show fashion transparency index for brand'):
+        brand = st.multiselect('Brand',
+            (brand_list), brand_list[0])
+        st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
+        # TO BE COMPLETED
+        st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
 
 
 
