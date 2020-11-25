@@ -271,6 +271,12 @@ if analysis == 'About':
     st.write('We are using two different data sources to compute the environmental scores of your clothes: \
         MadeBy Environmental Benchmark for Fibres and Amberoot’s Fabric Sustainability Score. Your sustainability score is \
         then calculated using the weights (percentages) of the different fibres composing your item of clothing.')
+    if st.checkbox('Display fibre data set', False):
+        fb_df_test = get_fibre_df('fibre_cleanedx5.csv')
+        st.dataframe(fb_df_test)
+    if st.checkbox('Display environmental score of brands', False):
+        brand_score_df = get_brand_transp_df('brands_final_score.xlsx')
+        st.dataframe(brand_score_df)
 
     st.markdown("<h3 style='text-align: center;'>About the future improvements</h3>", unsafe_allow_html=True)
     st.write('OCR improvements: We are aware that the accuracy of our OCR model could be improved.\
