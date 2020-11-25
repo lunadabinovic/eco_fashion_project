@@ -100,6 +100,7 @@ if analysis == 'Homepage':
     else:
         st.warning('No file has been selected')
 
+
     if buffer:
         temp_file.write(buffer.getvalue())
 
@@ -136,20 +137,43 @@ if analysis == 'Homepage':
     ## gets the tag info with percentages in a dataframne(columns = fibre and prencentages)
         tag_info = get_fiber_pct(all_matches_df,fibres_list)
 
-        tag_info_show = tag_info.assign(hack='').set_index('hack')
-        st.write(tag_info_show)
+        if isinstance(tag_info, pd.DataFrame):
 
-        percentage_list = percentages_to_float(tag_info)
-        st.write(check_100_pct(percentage_list))
+            tag_info_show = tag_info.assign(hack='').set_index('hack')
+            st.write(tag_info_show)
+
+            percentage_list = percentages_to_float(tag_info)
+            st.write(check_100_pct(percentage_list))
 
 
-    ## function for dropdown
-        def index(start = 0):
-            i = start
-            col1, col2 = st.beta_columns((2,1))
-            while (i < len(tag_info)) == True:
+
+        ## function for dropdown
+            def index(start = 0):
+                i = start
+                col1, col2 = st.beta_columns((2,1))
+                while (i < len(tag_info)) == True:
+                    option = col1.multiselect('Fiber',
+                        (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
+                    ad_fibres.append(option[0])
+
+
+                    numbers = list(range(0,101))
+                    numbers_list = []
+                    for number in numbers:
+                        numbers_list.append(str(number)+'%')
+                    option = col2.multiselect('Percentage',
+                        (numbers_list), list(tag_info['percentage'])[i])
+                    ad_percentages.append(option[0])
+
+                    i += 1
+
+            def add_components(start = len(tag_info)):
+                i = start
+                col1, col2 = st.beta_columns((2,1))
+                # CHECK IF CHECKBOX CLICKED :
+                #if i :
                 option = col1.multiselect('Fiber',
-                    (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
+                    (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
                 ad_fibres.append(option[0])
 
 
@@ -158,58 +182,114 @@ if analysis == 'Homepage':
                 for number in numbers:
                     numbers_list.append(str(number)+'%')
                 option = col2.multiselect('Percentage',
-                    (numbers_list), list(tag_info['percentage'])[i])
+                        (numbers_list), numbers_list[0], key=f"pct{i}")
                 ad_percentages.append(option[0])
 
-                i += 1
-
-        def add_components(start = len(tag_info)):
-            i = start
-            col1, col2 = st.beta_columns((2,1))
-            # CHECK IF CHECKBOX CLICKED :
-            #if i :
-            option = col1.multiselect('Fiber',
-                (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
-            ad_fibres.append(option[0])
+                #i += 1
 
 
-            numbers = list(range(0,101))
-            numbers_list = []
-            for number in numbers:
-                numbers_list.append(str(number)+'%')
-            option = col2.multiselect('Percentage',
-                    (numbers_list), numbers_list[0], key=f"pct{i}")
-            ad_percentages.append(option[0])
-
-            #i += 1
+            #TO BE COMPLETED: attention to infinite loop!
+            #def add_input_field_and_checkbox(k):
+                #add_components(start = len(tag_info))
+                #k += 1
+                #if st.checkbox('Add another component', key=f"{k}")
 
 
-        #TO BE COMPLETED: attention to infinite loop!
-        #def add_input_field_and_checkbox(k):
-            #add_components(start = len(tag_info))
-            #k += 1
-            #if st.checkbox('Add another component', key=f"{k}")
+            st.write("Are these the correct components and percentages?")
+            if st.checkbox('Yes'):
+                #get the sustainability score
+                final_score = get_final_score(fiber_score_df, tag_info)
+                st.write('The sustainability score is ', final_score)
+            elif st.checkbox('No'):
+                ad_fibres = []
+                ad_percentages = []
+                st.write('Please make the correct changes')
+                #col1, col2 = st.beta_columns((2,1))
+                index(start = 0)
+                k = 1
+
+                if st.checkbox('Add another component', key=f"{k}"):
+                    add_components(start = len(tag_info))
+                    # ADD ANOTHER COMPONENT IN A LOOP
+                    #add_input_field_and_checkbox(k)
+
+                if st.button('Calculate my final score'):
+                    d = {'fiber': ad_fibres, 'percentage': ad_percentages}
+                    ad_tag_info = pd.DataFrame(data=d)
+                    ad_tag_info_show = ad_tag_info.assign(hack='').set_index('hack')
+                    st.write(ad_tag_info_show)
+
+                    ad_percentage_list = percentages_to_float(ad_tag_info)
+                    st.write(check_100_pct(ad_percentage_list))
+                    ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
+                    st.write('The sustainability score is ', ad_sust_score)
+
+        else:
+            st.warning('Sorry our model did not detect text on your image. Please input the components manually')
+            if st.checkbox('Add component'):
+
+                ## first one
+                ad_fibres = []
+                ad_percentages = []
+
+                col1, col2 = st.beta_columns((2,1))
+                option = col1.multiselect('Fiber',
+                    (list(fb_df_test['Material'])), fb_df_test['Material'][0] ,key=123)
+                ad_fibres.append(option[0])
+
+                numbers = list(range(0,101))
+                numbers_list = []
+                for number in numbers:
+                    numbers_list.append(str(number)+'%')
+                option = col2.multiselect('Percentage',
+                    (numbers_list), numbers_list[0], key=124)
+                ad_percentages.append(option[0])
+
+                ## second one
+                col1, col2 = st.beta_columns((2,1))
+                option = col1.multiselect('Fiber',
+                    (list(fb_df_test['Material'])), fb_df_test['Material'][0],key=125)
+                ad_fibres.append(option[0])
+
+                numbers = list(range(0,101))
+                numbers_list = []
+                for number in numbers:
+                    numbers_list.append(str(number)+'%')
+                option = col2.multiselect('Percentage',
+                    (numbers_list),numbers_list[0], key=126)
+                ad_percentages.append(option[0])
+
+                ## third one
+                col1, col2 = st.beta_columns((2,1))
+                option = col1.multiselect('Fiber',
+                    (list(fb_df_test['Material'])), fb_df_test['Material'][0],key=126)
+                ad_fibres.append(option[0])
+
+                numbers = list(range(0,101))
+                numbers_list = []
+                for number in numbers:
+                    numbers_list.append(str(number)+'%')
+                option = col2.multiselect('Percentage',
+                    (numbers_list),numbers_list[0], key=127)
+                ad_percentages.append(option[0])
+
+                ## fourth one
+                col1, col2 = st.beta_columns((2,1))
+                option = col1.multiselect('Fiber',
+                    (list(fb_df_test['Material'])), fb_df_test['Material'][0],key=128)
+                ad_fibres.append(option[0])
+
+                numbers = list(range(0,101))
+                numbers_list = []
+                for number in numbers:
+                    numbers_list.append(str(number)+'%')
+                option = col2.multiselect('Percentage',
+                    (numbers_list), numbers_list[0], key=129)
+                ad_percentages.append(option[0])
 
 
-        st.write("Are these the correct components and percentages?")
-        if st.checkbox('Yes'):
-            #get the sustainability score
-            final_score = get_final_score(fiber_score_df, tag_info)
-            st.write('The sustainability score is ', final_score)
-        elif st.checkbox('No'):
-            ad_fibres = []
-            ad_percentages = []
-            st.write('Please make the correct changes')
-            #col1, col2 = st.beta_columns((2,1))
-            index(start = 0)
-            k = 1
 
-            if st.checkbox('Add another component', key=f"{k}"):
-                add_components(start = len(tag_info))
-                # ADD ANOTHER COMPONENT IN A LOOP
-                #add_input_field_and_checkbox(k)
-
-            if st.button('Calculate my final score'):
+            if st.checkbox('Calculate my final score'):
                 d = {'fiber': ad_fibres, 'percentage': ad_percentages}
                 ad_tag_info = pd.DataFrame(data=d)
                 ad_tag_info_show = ad_tag_info.assign(hack='').set_index('hack')
@@ -219,6 +299,9 @@ if analysis == 'Homepage':
                 st.write(check_100_pct(ad_percentage_list))
                 ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
                 st.write('The sustainability score is ', ad_sust_score)
+
+
+
 
 if analysis == 'Brand transparency':
     brand_score_df = get_brand_transp_df('brands_final_score.xlsx')
