@@ -10,6 +10,7 @@ from os.path import isfile
 from os.path import dirname
 import seaborn as sns
 from tempfile import NamedTemporaryFile
+import plotly.express as px
 #from tensorflow.keras.preprocessing_image import load_img
 
 try:
@@ -78,7 +79,7 @@ st.markdown(
 
 # Define the Menu
 st.sidebar.subheader('Select the Page')
-analysis = st.sidebar.selectbox("",['Homepage', 'About'])
+analysis = st.sidebar.selectbox("",['Homepage', 'About', 'Brand transparency'])
 
 if analysis == 'Homepage':
     st.write("Please upload your tag")
@@ -87,7 +88,7 @@ if analysis == 'Homepage':
     ## user uploades an image and the model converts it to a string
     st.set_option('deprecation.showfileUploaderEncoding', False)
 
-    buffer = st.file_uploader("Choose a JPG file" ,type="JPG")
+    buffer = st.file_uploader("Choose a file" ,type=["jpg", "ipeg", "jpeg", "png"] )
 
 
     ## prints the image if it is not None
@@ -219,41 +220,63 @@ if analysis == 'Homepage':
                 ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
                 st.write('The sustainability score is ', ad_sust_score)
 
-
-        if st.checkbox('Show fashion transparency index for brand'):
-            brand = st.multiselect('Brand',
-                (brand_list), brand_list[0])
-            st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
-            #st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
-            #st.write("Brand score (%): section 2: ", get_pct_brand_score_for_section_2(brand_score_df, brand))
-            #st.write("Brand score (%): section 3: ", get_pct_brand_score_for_section_3(brand_score_df, brand))
-            #st.write("Brand score (%): section 4: ", get_pct_brand_score_for_section_4(brand_score_df, brand))
-            #st.write("Brand score (%): section 5: ", get_pct_brand_score_for_section_5(brand_score_df, brand))
-            #st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
+if analysis == 'Brand transparency':
+    brand_score_df = get_brand_transp_df('brands_final_score.xlsx')
+    brand_list = get_brand_list(brand_score_df)
+    st.markdown('Have a look at the sustainability score for your favorite brands')
+    #if st.checkbox('Show fashion transparency index for brand'):
+    brand = st.multiselect('Brand',
+    (brand_list), brand_list[0])
+    st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
+        #st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
+        #st.write("Brand score (%): section 2: ", get_pct_brand_score_for_section_2(brand_score_df, brand))
+        #st.write("Brand score (%): section 3: ", get_pct_brand_score_for_section_3(brand_score_df, brand))
+        #st.write("Brand score (%): section 4: ", get_pct_brand_score_for_section_4(brand_score_df, brand))
+        #st.write("Brand score (%): section 5: ", get_pct_brand_score_for_section_5(brand_score_df, brand))
+        #st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
 
     ## Graph visualisation
-            sec_1= get_pct_brand_score_for_section_1(brand_score_df, brand)
-            sec_2= get_pct_brand_score_for_section_2(brand_score_df, brand)
-            sec_3= get_pct_brand_score_for_section_3(brand_score_df, brand)
-            sec_4= get_pct_brand_score_for_section_4(brand_score_df, brand)
-            sec_5= get_pct_brand_score_for_section_5(brand_score_df, brand)
-            chart_dict = {"Policy & Commitments (%)":sec_1.iloc[0], "Governance (%)": sec_2.iloc[0], "Traceability (%)": sec_3.iloc[0], "Know, show, fix (%)": sec_4.iloc[0], "Spotlight Issues (%)**": sec_5.iloc[0]}
-            chart_matrix = np.zeros((5,5))
-            counter = 0
-            for k,v in chart_dict.items():
-                chart_matrix[counter,counter] = v
-                counter += 1
-            chart_dict_df = pd.DataFrame(chart_matrix, index = chart_dict.keys(), columns = chart_dict.keys())
-            st.bar_chart(chart_dict_df)
+    sec_1= get_pct_brand_score_for_section_1(brand_score_df, brand)
+    sec_2= get_pct_brand_score_for_section_2(brand_score_df, brand)
+    sec_3= get_pct_brand_score_for_section_3(brand_score_df, brand)
+    sec_4= get_pct_brand_score_for_section_4(brand_score_df, brand)
+    sec_5= get_pct_brand_score_for_section_5(brand_score_df, brand)
+    chart_dict = {"Policy & Commitments (%)":sec_1.iloc[0], "Governance (%)": sec_2.iloc[0], "Traceability (%)": sec_3.iloc[0], "Know, show, fix (%)": sec_4.iloc[0], "Spotlight Issues (%)**": sec_5.iloc[0]}
+    chart_matrix = np.zeros((5,5))
+    counter = 0
+    for k,v in chart_dict.items():
+        chart_matrix[counter,counter] = v
+        counter += 1
+    chart_dict_df = pd.DataFrame(chart_matrix, index = chart_dict.keys(), columns = chart_dict.keys())
+    st.bar_chart(chart_dict_df)
             #st.write(chart_dict_df)
-            st.write("** Spotlight issues refer to: Conditions, Consumption, Climate, Composition")
+    st.write("** Spotlight issues refer to: Conditions, Consumption, Climate, Composition")
             ##For display in the same table
-            columns = list(chart_dict.keys())
-            values = list(chart_dict.values())
-            arr_len = len(values)
-            chart_df = pd.DataFrame(np.array(values, dtype=object).reshape(1, arr_len), columns=columns)
-            st.write(chart_df)
+            #columns = list(chart_dict.keys())
+            #values = list(chart_dict.values())
+            #arr_len = len(values)
+            #chart_df = pd.DataFrame(np.array(values, dtype=object).reshape(1, arr_len), columns=columns)
+            #st.write(chart_df)
 
+
+    st.write("Want to know more ? Then click on the following sections to visualise how every brand scores based on the different categories")
+    brand_score_df.reset_index(inplace = True)
+    brand_score_df.rename(columns = {'1. POLICY & COMMITMENTS': 'Policy & Commitments', '2. GOVERNANCE': 'Governance','3. TRACEABILITY': 'Traceability','4. KNOW, SHOW & FIX': 'Know, Show & Fix','5. SPOTLIGHT ISSUES (CONDITIONS, CONSUMPTION, COMPOSITION, CLIMATE)':'Spotlight Issues'}, inplace = True)
+    if st.checkbox('Policy & Commitments'):
+        fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Policy & Commitments', hover_data = ["Brand Name"])
+        st.plotly_chart(fig)
+    if st.checkbox('Governance'):
+        fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Governance', hover_data = ["Brand Name"])
+        st.plotly_chart(fig)
+    if st.checkbox('Traceability'):
+        fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Traceability', hover_data = ["Brand Name"])
+        st.plotly_chart(fig)
+    if st.checkbox('Know, Show & Fix'):
+        fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Know, Show & Fix', hover_data = ["Brand Name"])
+        st.plotly_chart(fig)
+    if st.checkbox('Spotlight Issues'):
+        fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Spotlight Issues', hover_data = ["Brand Name"])
+        st.plotly_chart(fig)
 
 
 if analysis == 'About':
@@ -271,6 +294,7 @@ if analysis == 'About':
     st.write('We are using two different data sources to compute the environmental scores of your clothes: \
         MadeBy Environmental Benchmark for Fibres and Amberoot’s Fabric Sustainability Score. Your sustainability score is \
         then calculated using the weights (percentages) of the different fibres composing your item of clothing.')
+    st.write('Our sustainability score for brands comes from the Fashion Transparency Index available here: https://www.fashionrevolution.org/about/transparency/. We are only accounting for the 2020 values.')
     if st.checkbox('Display fibre data set', False):
         fb_df_test = get_fibre_df('fibre_cleanedx5.csv')
         st.dataframe(fb_df_test)
