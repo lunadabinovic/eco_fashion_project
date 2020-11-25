@@ -225,7 +225,7 @@ if analysis == 'Brand transparency':
     brand_list = get_brand_list(brand_score_df)
     st.markdown('Have a look at the sustainability score for your favorite brands')
     #if st.checkbox('Show fashion transparency index for brand'):
-    brand = st.multiselect('Brand',
+    brand = st.multiselect('Brands selection',
     (brand_list), brand_list[0])
     st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
         #st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
