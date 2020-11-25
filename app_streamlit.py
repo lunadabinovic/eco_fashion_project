@@ -145,8 +145,9 @@ if analysis == 'Homepage':
     ## function for dropdown
         def index(start = 0):
             i = start
+            col1, col2 = st.beta_columns((2,1))
             while (i < len(tag_info)) == True:
-                option = st.multiselect('Fiber',
+                option = col1.multiselect('Fiber',
                     (list(fb_df_test['Material'])), list(tag_info['fiber'])[i])
                 ad_fibres.append(option[0])
 
@@ -155,7 +156,7 @@ if analysis == 'Homepage':
                 numbers_list = []
                 for number in numbers:
                     numbers_list.append(str(number)+'%')
-                option = st.multiselect('Percentage',
+                option = col2.multiselect('Percentage',
                     (numbers_list), list(tag_info['percentage'])[i])
                 ad_percentages.append(option[0])
 
@@ -163,9 +164,10 @@ if analysis == 'Homepage':
 
         def add_components(start = len(tag_info)):
             i = start
+            col1, col2 = st.beta_columns((2,1))
             # CHECK IF CHECKBOX CLICKED :
             #if i :
-            option = st.multiselect('Fiber',
+            option = col1.multiselect('Fiber',
                 (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
             ad_fibres.append(option[0])
 
@@ -174,7 +176,7 @@ if analysis == 'Homepage':
             numbers_list = []
             for number in numbers:
                 numbers_list.append(str(number)+'%')
-            option = st.multiselect('Percentage',
+            option = col2.multiselect('Percentage',
                     (numbers_list), numbers_list[0], key=f"pct{i}")
             ad_percentages.append(option[0])
 
@@ -197,6 +199,7 @@ if analysis == 'Homepage':
             ad_fibres = []
             ad_percentages = []
             st.write('Please make the correct changes')
+            #col1, col2 = st.beta_columns((2,1))
             index(start = 0)
             k = 1
 
