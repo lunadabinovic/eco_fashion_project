@@ -258,59 +258,59 @@ if analysis == 'Sustainability score':
                 ad_percentages = []
 
                 col1, col2 = st.beta_columns((2,1))
-                option = col1.multiselect('Fiber',
-                    (list(fb_df_test['Material'])), fb_df_test['Material'][0] ,key=123)
-                ad_fibres.append(option[0])
+                option = col1.selectbox('Fiber',
+                    (list(fb_df_test['Material'])),key=123)
+                ad_fibres.append(option)
 
                 numbers = list(range(0,101))
                 numbers_list = []
                 for number in numbers:
                     numbers_list.append(str(number)+'%')
-                option = col2.multiselect('Percentage',
-                    (numbers_list), numbers_list[0], key=124)
-                ad_percentages.append(option[0])
+                option = col2.selectbox('Percentage',
+                    (numbers_list),key=124)
+                ad_percentages.append(option)
 
                 ## second one
                 col1, col2 = st.beta_columns((2,1))
-                option = col1.multiselect('Fiber',
-                    (list(fb_df_test['Material'])), fb_df_test['Material'][0],key=125)
-                ad_fibres.append(option[0])
+                option = col1.selectbox('Fiber',
+                    (list(fb_df_test['Material'])),key=125)
+                ad_fibres.append(option)
 
                 numbers = list(range(0,101))
                 numbers_list = []
                 for number in numbers:
                     numbers_list.append(str(number)+'%')
-                option = col2.multiselect('Percentage',
-                    (numbers_list),numbers_list[0], key=126)
-                ad_percentages.append(option[0])
+                option = col2.selectbox('Percentage',
+                    (numbers_list),key=126)
+                ad_percentages.append(option)
 
                 ## third one
                 col1, col2 = st.beta_columns((2,1))
-                option = col1.multiselect('Fiber',
-                    (list(fb_df_test['Material'])), fb_df_test['Material'][0],key=126)
-                ad_fibres.append(option[0])
+                option = col1.selectbox('Fiber',
+                    (list(fb_df_test['Material'])), key=126)
+                ad_fibres.append(option)
 
                 numbers = list(range(0,101))
                 numbers_list = []
                 for number in numbers:
                     numbers_list.append(str(number)+'%')
-                option = col2.multiselect('Percentage',
-                    (numbers_list),numbers_list[0], key=127)
-                ad_percentages.append(option[0])
+                option = col2.selectbox('Percentage',
+                    (numbers_list), key=127)
+                ad_percentages.append(option)
 
                 ## fourth one
                 col1, col2 = st.beta_columns((2,1))
-                option = col1.multiselect('Fiber',
-                    (list(fb_df_test['Material'])), fb_df_test['Material'][0],key=128)
-                ad_fibres.append(option[0])
+                option = col1.selectbox('Fiber',
+                    (list(fb_df_test['Material'])), key=128)
+                ad_fibres.append(option)
 
                 numbers = list(range(0,101))
                 numbers_list = []
                 for number in numbers:
                     numbers_list.append(str(number)+'%')
-                option = col2.multiselect('Percentage',
-                    (numbers_list), numbers_list[0], key=129)
-                ad_percentages.append(option[0])
+                option = col2.selectbox('Percentage',
+                    (numbers_list), key=129)
+                ad_percentages.append(option)
 
 
 
@@ -415,7 +415,7 @@ if analysis == 'About':
     st.markdown("<h3 style='text-align: center;'>About Sustainaholics</h3>", unsafe_allow_html=True)
     st.write('Sustainaholics came about thanks to Le Wagon Data Science Bootcamp where Antonia, Luna and Charlotte met. \
         Charlotte, mom of 2, is our coding superstar and mood-uplifter. Luna (humanitarian engineer and project leader) \
-        and Antonia (soon to be marine biologist) are the perfect duo, making every individual assignment, a team effort since\
+        and Antonia (soon to be marine scientist) are the perfect duo, making every individual assignment, a team effort since\
         day one, ensuring a fun environment for everyone! We are all passionate about the environment and concerned about the impact\
         of fashion on our planet. We wanted to create an app that makes it easier for consumers to become more aware of the environmental impact \
         clothes can have but also give them the possibility to make better informed choices.')
@@ -440,6 +440,4 @@ if analysis == 'About':
     st.write('Geolocalisation: If an item is made in Bangladesh for example and you are buying it in Portugal, it would not have the same \
     environmental impact as if you were buying it in Bangladesh. Therefore, integrating the added impact based on the location of \
     the buyer according to where the item was produced, could also be an interesting feature to add.')
-    st.write('Business Opportunities: Perhaps a functionality could be integrated where the user is asked\
-    for or what they are looking to buy (ie: party dress, pants etc.) and is recommended different sustainable \
-    sources/shops, to buy such an item.')
+    st.write('Additional features: Include a recommendation system of similar clothing items with a better sustainability and/or brand score.')
