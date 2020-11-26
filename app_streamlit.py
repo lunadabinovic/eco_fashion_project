@@ -43,7 +43,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-#sc1, sc2, sc3 = st.beta_columns(3)
 
 #st.sidebar.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", width=150)
 #st.sidebar.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", use_column_width=True)
@@ -214,9 +213,13 @@ if analysis == 'Sustainability score':
             if st.checkbox('Yes'):
                 #get the sustainability score
                 final_score = get_final_score(fiber_score_df, tag_info)
-                st.write('Sustainability score: ', convert_5scale_to_emoji(final_score), final_score,"/5")
-                #st.write('The sustainability score is ', final_score)
-                #st.write(convert_5scale_to_emoji(final_score))
+
+                sc1, sc2, sc3, sc4, sc5 = st.beta_columns((1,1,4,1,1))
+
+                sc2.markdown(convert_5scale_to_emoji(final_score))
+                sc3.markdown(f"<div style='font-size: 20px; font-weight: bold; color: #406144;'>Sustainability score: {final_score}/5</div>", unsafe_allow_html=True)
+                sc4.markdown(convert_5scale_to_emoji(final_score))
+                #st.write('Sustainability score: ', convert_5scale_to_emoji(final_score), final_score,"/5")
             elif st.checkbox('No'):
                 ad_fibres = []
                 ad_percentages = []
@@ -239,9 +242,11 @@ if analysis == 'Sustainability score':
                     ad_percentage_list = percentages_to_float(ad_tag_info)
                     st.write(check_100_pct(ad_percentage_list))
                     ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
-                    st.write('Sustainability score: ', convert_5scale_to_emoji(ad_sust_score), ad_sust_score,"/5")
-                    #st.write('The sustainability score is ', ad_sust_score)
-                    #st.write(convert_5scale_to_emoji(ad_sust_score))
+                    sc1, sc2, sc3, sc4, sc5 = st.beta_columns((1,1,4,1,1))
+                    sc2.markdown(convert_5scale_to_emoji(ad_sust_score))
+                    sc3.markdown(f"<div style='font-size: 20px; font-weight: bold; color: #406144;'>Sustainability score: {ad_sust_score}/5</div>", unsafe_allow_html=True)
+                    sc4.markdown(convert_5scale_to_emoji(ad_sust_score))
+                    #st.write('Sustainability score: ', convert_5scale_to_emoji(ad_sust_score), ad_sust_score,"/5")
 
         else:
             st.warning('Sorry our model did not detect text on your image. Please input the components manually')
@@ -317,7 +322,11 @@ if analysis == 'Sustainability score':
                 ad_percentage_list = percentages_to_float(ad_tag_info)
                 st.write(check_100_pct(ad_percentage_list))
                 ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
-                st.write('Sustainability score: ', convert_5scale_to_emoji(ad_sust_score), ad_sust_score,"/5")
+                sc1, sc2, sc3, sc4, sc5 = st.beta_columns((1,1,4,1,1))
+                sc2.markdown(convert_5scale_to_emoji(ad_sust_score))
+                sc3.markdown(f"<div style='font-size: 20px; font-weight: bold; color: #406144;'>Sustainability score: {ad_sust_score}/5</div>", unsafe_allow_html=True)
+                sc4.markdown(convert_5scale_to_emoji(ad_sust_score))
+                #st.write('Sustainability score: ', convert_5scale_to_emoji(ad_sust_score), ad_sust_score,"/5")
                 #st.write(convert_5scale_to_emoji(ad_sust_score))
 
 
