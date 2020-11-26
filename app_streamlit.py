@@ -43,12 +43,14 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.sidebar.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", width=150)
+#sc1, sc2, sc3 = st.beta_columns(3)
+
+#st.sidebar.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", width=150)
 #st.sidebar.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", use_column_width=True)
 
 # Define the Menu
 st.sidebar.subheader('Select the Page')
-analysis = st.sidebar.selectbox("",['Homepage', 'About', 'Brand transparency'])
+analysis = st.sidebar.selectbox("",['Sustainability score', 'Brand transparency', 'About'])
 
 
 page_bg_img = '''
@@ -103,8 +105,9 @@ hc2.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/
 #st.image('<style= text-align: right;>image<')
 
 
-if analysis == 'Homepage':
-    st.write("Please upload your tag")
+if analysis == 'Sustainability score':
+    st.markdown("<h1 style='text-align: center; color: #406144; position: relative; padding-bottom: 50px'>How sustainable are the clothes you like?</h1>", unsafe_allow_html=True)
+    st.write("Please upload your clothing tag")
 
 
     ## user uploades an image and the model converts it to a string
@@ -320,6 +323,7 @@ if analysis == 'Homepage':
 
 
 if analysis == 'Brand transparency':
+    st.markdown("<h1 style='text-align: center; color: #406144; position: relative; padding-bottom: 50px'>How sustainable is the brand you like?</h1>", unsafe_allow_html=True)
     brand_score_df = get_brand_transp_df('brands_final_score.xlsx')
     brand_list = get_brand_list(brand_score_df)
     st.markdown('Have a look at the sustainability score for your favorite brands')
@@ -382,6 +386,7 @@ if analysis == 'Brand transparency':
 
 
 if analysis == 'About':
+    #st.markdown("<h1 style='text-align: center; color: #406144; position: relative; padding-bottom: 50px'>How sustainable are the clothes you like?</h1>", unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center;'>About Sustainaholics</h3>", unsafe_allow_html=True)
     st.write('Sustainaholics came about thanks to Le Wagon Data Science Bootcamp where Antonia, Luna and Charlotte met. \
         Charlotte, mom of 2, is our coding superstar and mood-uplifter. Luna (humanitarian engineer and project leader) \
