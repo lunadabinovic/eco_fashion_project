@@ -342,14 +342,12 @@ if analysis == 'Brand transparency':
     (brand_list))
     brand_score = float(get_overall_pct_brand_score(brand_score_df, brand))
     brand_score_pct = round(brand_score * 100)
-    st.write("Overall brand score (%): ", convert_pct_to_emoji(brand_score), brand_score_pct, " %")
-    #st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
-        #st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
-        #st.write("Brand score (%): section 2: ", get_pct_brand_score_for_section_2(brand_score_df, brand))
-        #st.write("Brand score (%): section 3: ", get_pct_brand_score_for_section_3(brand_score_df, brand))
-        #st.write("Brand score (%): section 4: ", get_pct_brand_score_for_section_4(brand_score_df, brand))
-        #st.write("Brand score (%): section 5: ", get_pct_brand_score_for_section_5(brand_score_df, brand))
-        #st.write("Brand score per section (%): ", get_pct_brand_scores_per_section(brand_score_df, brand))
+    #st.write("Overall brand score (%): ", convert_pct_to_emoji(brand_score), brand_score_pct, " %")
+    sc1, sc2, sc3, sc4, sc5 = st.beta_columns((1,1,4,1,1))
+
+    sc2.markdown(convert_pct_to_emoji(brand_score))
+    sc3.markdown(f"<div style='font-size: 20px; font-weight: bold; color: #406144;'>Overall brand score (FTI): {brand_score_pct} %</div>", unsafe_allow_html=True)
+    sc4.markdown(convert_pct_to_emoji(brand_score))
 
     ## Graph visualisation
     sec_1= get_pct_brand_score_for_section_1(brand_score_df, brand)
