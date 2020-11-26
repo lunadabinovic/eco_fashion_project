@@ -27,42 +27,8 @@ get_brand_transp_df, get_brand_list
 from eco_fashion_project.trainer import ocr_core, split_lines, get_matches, get_fiber_pct, get_pct, get_final_score,\
 get_overall_pct_brand_score, get_pct_brand_scores_per_section, get_pct_brand_score_for_section_1, get_pct_brand_score_for_section_2,\
 get_pct_brand_score_for_section_3, get_pct_brand_score_for_section_4, get_pct_brand_score_for_section_5
-from eco_fashion_project.utils import get_pct, percentages_to_float, check_100_pct, get_score
-
-st.markdown('''
-    <img
-        src="https://images.unsplash.com/photo-1489065094455-c2d576ff27a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80" id="background-image-grass">
-    ''',
-    unsafe_allow_html=True)
-
-# Overall title
-st.markdown("<h1 style='text-align: center; color: DarkGreen; position: relative;'>Sustainaholics</h1>", unsafe_allow_html=True)
-st.text("")
-st.text("")
-
-#background-image
-page_bg_img = '''
-   <style>
-   #background-image-grass {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: auto;
-        opacity: 40%;
-       }
-   </style>
-   '''
-    # .block-container {
-    #     max-width: 10000px !important;
-    #  }
-#
-st.markdown(page_bg_img, unsafe_allow_html=True)
-
-#image = Image.open('/Users/antonia/code/lunadabinovic/eco_fashion_project/raw_data/logo_size.jpg')
-#st.image('<style=image-align:right;>image<>')
-#st.image('<style= text-align: right;>image<')
-
+from eco_fashion_project.utils import get_pct, percentages_to_float, check_100_pct, get_score,\
+convert_5scale_to_emoji, convert_pct_to_emoji
 
 
 st.markdown(
@@ -77,9 +43,65 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.sidebar.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", width=150)
+#st.sidebar.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", use_column_width=True)
+
 # Define the Menu
 st.sidebar.subheader('Select the Page')
 analysis = st.sidebar.selectbox("",['Homepage', 'About', 'Brand transparency'])
+
+
+page_bg_img = '''
+<style>
+.reportview-container {
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    position: relative;
+    }
+
+.reportview-container::before {
+    background-image: url(https://images.unsplash.com/photo-1489065094455-c2d576ff27a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80);
+    background-size: cover;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    opacity: 0.4;
+    }
+
+.reportview-container::after {
+    background-color: #81a385;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.4;
+    }
+</style>
+'''
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
+hc1, hc2, hc3 = st.beta_columns((1,2,1))
+hc2.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", use_column_width=True)
+#st.image("https://dewey.tailorbrands.com/production/brand_version_mockup_image/659/4176770659_a3bf8455-bde9-4cb3-aa49-6dc1f30ea7b5.png?cb=1606149896", width=200)
+
+#st.markdown("<h1 style='text-align: center; color: #406144; position: relative; padding-bottom: 50px'>Sustainaholics</h1>", unsafe_allow_html=True)
+
+#image = Image.open('/Users/antonia/code/lunadabinovic/eco_fashion_project/raw_data/logo_size.jpg')
+#st.image('<style=image-align:right;>image<>')
+#st.image('<style= text-align: right;>image<')
+
 
 if analysis == 'Homepage':
     st.write("Please upload your tag")
@@ -90,15 +112,16 @@ if analysis == 'Homepage':
 
     buffer = st.file_uploader("Choose a file" ,type=["jpg", "ipeg", "jpeg", "png"] )
 
+    c1, c2, c3, c4 = st.beta_columns((1,2,2,1))
 
     ## prints the image if it is not None
     if buffer != None:
         file_bytes = np.asarray(bytearray(buffer.read()), dtype=np.uint8)
         opencv_image = cv2.imdecode(file_bytes, 1)
-        st.image(opencv_image, channels="BGR", width= 160)
+        c2.image(opencv_image, channels="BGR", width= 160)
         temp_file = NamedTemporaryFile(delete=False)
     else:
-        st.warning('No file has been selected')
+        st.warning('No tag has been selected')
 
 
     if buffer:
@@ -140,7 +163,7 @@ if analysis == 'Homepage':
         if isinstance(tag_info, pd.DataFrame):
 
             tag_info_show = tag_info.assign(hack='').set_index('hack')
-            st.write(tag_info_show)
+            c3.write(tag_info_show)
 
             percentage_list = percentages_to_float(tag_info)
             st.write(check_100_pct(percentage_list))
@@ -170,12 +193,9 @@ if analysis == 'Homepage':
             def add_components(start = len(tag_info)):
                 i = start
                 col1, col2 = st.beta_columns((2,1))
-                # CHECK IF CHECKBOX CLICKED :
-                #if i :
                 option = col1.multiselect('Fiber',
                     (list(fb_df_test['Material'])), list(fb_df_test['Material'])[0], key=f"fiber{i}")
                 ad_fibres.append(option[0])
-
 
                 numbers = list(range(0,101))
                 numbers_list = []
@@ -185,21 +205,15 @@ if analysis == 'Homepage':
                         (numbers_list), numbers_list[0], key=f"pct{i}")
                 ad_percentages.append(option[0])
 
-                #i += 1
-
-
-            #TO BE COMPLETED: attention to infinite loop!
-            #def add_input_field_and_checkbox(k):
-                #add_components(start = len(tag_info))
-                #k += 1
-                #if st.checkbox('Add another component', key=f"{k}")
 
 
             st.write("Are these the correct components and percentages?")
             if st.checkbox('Yes'):
                 #get the sustainability score
                 final_score = get_final_score(fiber_score_df, tag_info)
-                st.write('The sustainability score is ', final_score)
+                st.write('Sustainability score: ', convert_5scale_to_emoji(final_score), final_score,"/5")
+                #st.write('The sustainability score is ', final_score)
+                #st.write(convert_5scale_to_emoji(final_score))
             elif st.checkbox('No'):
                 ad_fibres = []
                 ad_percentages = []
@@ -213,7 +227,7 @@ if analysis == 'Homepage':
                     # ADD ANOTHER COMPONENT IN A LOOP
                     #add_input_field_and_checkbox(k)
 
-                if st.button('Calculate my final score'):
+                if st.button('Calculate sustainability score'):
                     d = {'fiber': ad_fibres, 'percentage': ad_percentages}
                     ad_tag_info = pd.DataFrame(data=d)
                     ad_tag_info_show = ad_tag_info.assign(hack='').set_index('hack')
@@ -222,7 +236,9 @@ if analysis == 'Homepage':
                     ad_percentage_list = percentages_to_float(ad_tag_info)
                     st.write(check_100_pct(ad_percentage_list))
                     ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
-                    st.write('The sustainability score is ', ad_sust_score)
+                    st.write('Sustainability score: ', convert_5scale_to_emoji(ad_sust_score), ad_sust_score,"/5")
+                    #st.write('The sustainability score is ', ad_sust_score)
+                    #st.write(convert_5scale_to_emoji(ad_sust_score))
 
         else:
             st.warning('Sorry our model did not detect text on your image. Please input the components manually')
@@ -289,7 +305,7 @@ if analysis == 'Homepage':
 
 
 
-            if st.checkbox('Calculate my final score'):
+            if st.checkbox('Calculate sustainability score'):
                 d = {'fiber': ad_fibres, 'percentage': ad_percentages}
                 ad_tag_info = pd.DataFrame(data=d)
                 ad_tag_info_show = ad_tag_info.assign(hack='').set_index('hack')
@@ -298,8 +314,8 @@ if analysis == 'Homepage':
                 ad_percentage_list = percentages_to_float(ad_tag_info)
                 st.write(check_100_pct(ad_percentage_list))
                 ad_sust_score = get_final_score(fiber_score_df, ad_tag_info)
-                st.write('The sustainability score is ', ad_sust_score)
-
+                st.write('Sustainability score: ', convert_5scale_to_emoji(ad_sust_score), ad_sust_score,"/5")
+                #st.write(convert_5scale_to_emoji(ad_sust_score))
 
 
 
@@ -310,7 +326,10 @@ if analysis == 'Brand transparency':
     #if st.checkbox('Show fashion transparency index for brand'):
     brand = st.multiselect('Brands selection',
     (brand_list), brand_list[0])
-    st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
+    brand_score = float(get_overall_pct_brand_score(brand_score_df, brand))
+    brand_score_pct = round(brand_score * 100)
+    st.write("Overall brand score (%): ", convert_pct_to_emoji(brand_score), brand_score_pct, " %")
+    #st.write("Overall brand score (%): ", get_overall_pct_brand_score(brand_score_df, brand))
         #st.write("Brand score (%): section 1: ", get_pct_brand_score_for_section_1(brand_score_df, brand))
         #st.write("Brand score (%): section 2: ", get_pct_brand_score_for_section_2(brand_score_df, brand))
         #st.write("Brand score (%): section 3: ", get_pct_brand_score_for_section_3(brand_score_df, brand))
