@@ -11,6 +11,7 @@ from os.path import dirname
 import seaborn as sns
 from tempfile import NamedTemporaryFile
 import plotly.express as px
+import plotly.graph_objs as go
 #from tensorflow.keras.preprocessing_image import load_img
 
 try:
@@ -328,8 +329,8 @@ if analysis == 'Brand transparency':
     brand_list = get_brand_list(brand_score_df)
     st.markdown('Have a look at the sustainability score for your favorite brands')
     #if st.checkbox('Show fashion transparency index for brand'):
-    brand = st.multiselect('Brands selection',
-    (brand_list), brand_list[0])
+    brand = st.selectbox('Brands selection',
+    (brand_list))
     brand_score = float(get_overall_pct_brand_score(brand_score_df, brand))
     brand_score_pct = round(brand_score * 100)
     st.write("Overall brand score (%): ", convert_pct_to_emoji(brand_score), brand_score_pct, " %")
@@ -347,7 +348,7 @@ if analysis == 'Brand transparency':
     sec_3= get_pct_brand_score_for_section_3(brand_score_df, brand)
     sec_4= get_pct_brand_score_for_section_4(brand_score_df, brand)
     sec_5= get_pct_brand_score_for_section_5(brand_score_df, brand)
-    chart_dict = {"Policy & Commitments (%)":sec_1.iloc[0], "Governance (%)": sec_2.iloc[0], "Traceability (%)": sec_3.iloc[0], "Know, show, fix (%)": sec_4.iloc[0], "Spotlight Issues (%)**": sec_5.iloc[0]}
+    chart_dict = {"Policy & Commitments (%)":sec_1, "Governance (%)": sec_2, "Traceability (%)": sec_3, "Know, show, fix (%)": sec_4, "Spotlight Issues (%)**": sec_5}
     chart_matrix = np.zeros((5,5))
     counter = 0
     for k,v in chart_dict.items():
@@ -370,19 +371,36 @@ if analysis == 'Brand transparency':
     brand_score_df.rename(columns = {'1. POLICY & COMMITMENTS': 'Policy & Commitments', '2. GOVERNANCE': 'Governance','3. TRACEABILITY': 'Traceability','4. KNOW, SHOW & FIX': 'Know, Show & Fix','5. SPOTLIGHT ISSUES (CONDITIONS, CONSUMPTION, COMPOSITION, CLIMATE)':'Spotlight Issues'}, inplace = True)
     if st.checkbox('Policy & Commitments'):
         fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Policy & Commitments', hover_data = ["Brand Name"])
+        fig.update(layout= dict(
+            legend= dict(orientation='h', y= 1.1, x=0.5),
+            annotations= [go.layout.Annotation(text= brand, x= brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]["FASHION TRANSPARENCY INDEX 2020 (%)"].iloc[0], y=brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]["Policy & Commitments"].iloc[0])]))
         st.plotly_chart(fig)
     if st.checkbox('Governance'):
         fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Governance', hover_data = ["Brand Name"])
+        fig.update(layout= dict(
+            legend= dict(orientation='h', y= 1.1, x=0.5),
+            annotations= [go.layout.Annotation(text= brand, x= brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]["FASHION TRANSPARENCY INDEX 2020 (%)"].iloc[0], y=brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]['Governance'].iloc[0])]))
         st.plotly_chart(fig)
     if st.checkbox('Traceability'):
         fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Traceability', hover_data = ["Brand Name"])
+        fig.update(layout= dict(
+            legend= dict(orientation='h', y= 1.1, x=0.5),
+            annotations= [go.layout.Annotation(text= brand, x= brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]["FASHION TRANSPARENCY INDEX 2020 (%)"].iloc[0], y=brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]['Traceability'].iloc[0])]))
         st.plotly_chart(fig)
     if st.checkbox('Know, Show & Fix'):
         fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Know, Show & Fix', hover_data = ["Brand Name"])
+        fig.update(layout= dict(
+            legend= dict(orientation='h', y= 1.1, x=0.5),
+            annotations= [go.layout.Annotation(text= brand, x= brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]["FASHION TRANSPARENCY INDEX 2020 (%)"].iloc[0], y=brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]['Know, Show & Fix'].iloc[0])]))
         st.plotly_chart(fig)
     if st.checkbox('Spotlight Issues'):
         fig = px.scatter(brand_score_df, x='FASHION TRANSPARENCY INDEX 2020 (%)', y='Spotlight Issues', hover_data = ["Brand Name"])
+        fig.update(layout= dict(
+            legend= dict(orientation='h', y= 1.1, x=0.5),
+            annotations= [go.layout.Annotation(text= brand, x= brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]["FASHION TRANSPARENCY INDEX 2020 (%)"].iloc[0], y=brand_score_df[brand_score_df["Brand Name"].str.startswith(brand)]['Spotlight Issues'].iloc[0])]))
         st.plotly_chart(fig)
+
+
 
 
 if analysis == 'About':
