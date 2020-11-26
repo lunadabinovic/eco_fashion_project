@@ -170,4 +170,5 @@ if __name__ == "__main__":
     #brand = 'Abercrombie & Fitch'
     brand = "Versace"
     print(f"Overall brand score {brand} (%): {get_overall_pct_brand_score(brand_score_df, brand)}")
+    print(f"Overall brand score {brand} (%): {float(get_overall_pct_brand_score(brand_score_df, brand))}")
     print(f"Brand score per section {brand} (%): {get_pct_brand_scores_per_section(brand_score_df, brand)}")

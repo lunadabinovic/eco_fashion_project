@@ -36,9 +36,9 @@ def percentages_to_float(df):
 
 def check_100_pct(percentage_list):
     if sum(percentage_list) != 1.0:
-        return "Please check the composition of the label: percentages do not add up to 100%"
+        return ":exclamation: Please check the composition of the label: percentages do not add up to 100%"
     #pass
-    return "Checked: the percentages add up to 100%"
+    return ":white_check_mark: Checked: the percentages add up to 100%"
 
 def get_score(fiber_score_df, df):
     score_list = []
@@ -48,3 +48,27 @@ def get_score(fiber_score_df, df):
         score_list.append(fiber_score_df.loc[f"{fiber_id}"]['Final Score'])
 
     return score_list
+
+def convert_5scale_to_emoji(score):
+    if score > 4.0 and score <= 5.0:
+        return ":smiley:"
+    elif score > 3.0 and score <= 4.0:
+        return ":smile:"
+    elif score > 2.0 and score <= 3.0:
+        return ":neutral_face:"
+    elif score > 1.0 and score <= 2.0:
+        return ":cry:"
+    elif score > 0.0 and score <= 1.0:
+        return ":sob:"
+
+def convert_pct_to_emoji(pct):
+    if pct > 0.8 and pct <= 1.0:
+        return ":smiley:"
+    elif pct > 0.6 and pct <= 0.8:
+        return ":smile:"
+    elif pct > 0.4 and pct <= 0.6:
+        return ":neutral_face:"
+    elif pct > 0.2 and pct <= 0.4:
+        return ":cry:"
+    elif pct > 0.0 and pct <= 0.2:
+        return ":sob:"
