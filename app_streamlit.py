@@ -412,17 +412,25 @@ if analysis == 'Brand transparency':
 
 if analysis == 'About':
     #st.markdown("<h1 style='text-align: center; color: #406144; position: relative; padding-bottom: 50px'>How sustainable are the clothes you like?</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>About Sustainaholics</h3>", unsafe_allow_html=True)
-    st.write('Sustainaholics came about thanks to Le Wagon Data Science Bootcamp where Antonia, Luna and Charlotte met. \
-        Charlotte, mom of 2, is our coding superstar and mood-uplifter. Luna (humanitarian engineer and project leader) \
-        and Antonia (soon to be marine scientist) are the perfect duo, making every individual assignment, a team effort since\
-        day one, ensuring a fun environment for everyone! We are all passionate about the environment and concerned about the impact\
+    st.markdown("<h1 style='text-align: center; color: #406144; position: relative; padding-bottom: 50px'>How sustainable are the clothes you like?</h1>", unsafe_allow_html=True)
+
+    st.markdown("<h3 style='text-align: center; color: #406144; font-weight: bold;'>About Sustainaholics</h3>", unsafe_allow_html=True)
+    #st.write('Sustainaholics came about thanks to Le Wagon Data Science Bootcamp where Antonia, Luna and Charlotte met. \
+        #Charlotte, mom of 2, is our coding superstar and mood-uplifter. Luna (humanitarian engineer and project leader) \
+        #and Antonia (soon to be marine scientist) are the perfect duo, making every individual assignment, a team effort since\
+        #day one, ensuring a fun environment for everyone! \
+    st.write('Sustainaholics came about thanks to the first Le Wagon Data Science Bootcamp in Lisbon where Antonia, Luna and Charlotte met. \
+        Luna (humanitarian engineer and project leader) pitched the idea for the final group project. Antonia (soon to be marine scientist) \
+        self-evidently wanted to join forces on this endeavour, as both talented young ladies had made every individual assignment a fun team effort \
+        since day one of the bootcamp. It also sparked the interest of like-minded remote Charlotte (economist), who further added some of her \
+        research, business and coding experience and a pinch of mood-uplifting now and then to this wonderful team.')
+    st.write('We are all passionate about the environment and concerned about the impact\
         of fashion on our planet. We wanted to create an app that makes it easier for consumers to become more aware of the environmental impact \
         clothes can have but also give them the possibility to make better informed choices.')
     st.write('Sustainaholics is truly about unity and supporting each other. We believe that effective change can only happen collectively \
         and we hope to be a part of this change.')
 
-    st.markdown("<h3 style='text-align: center;'>About our sustainability scores</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: #406144; font-weight: bold;'>About our sustainability scores</h3>", unsafe_allow_html=True)
     st.write('We are using two different data sources to compute the environmental scores of your clothes: \
         MadeBy Environmental Benchmark for Fibres and Amberoot’s Fabric Sustainability Score. Your sustainability score is \
         then calculated using the weights (percentages) of the different fibres composing your item of clothing.')
@@ -430,14 +438,20 @@ if analysis == 'About':
     if st.checkbox('Display fibre data set', False):
         fb_df_test = get_fibre_df('fibre_cleanedx5.csv')
         st.dataframe(fb_df_test)
-    if st.checkbox('Display environmental score of brands', False):
+    if st.checkbox('Display brand scores', False):
         brand_score_df = get_brand_transp_df('brands_final_score.xlsx')
         st.dataframe(brand_score_df)
 
-    st.markdown("<h3 style='text-align: center;'>About the future improvements</h3>", unsafe_allow_html=True)
-    st.write('OCR improvements: We are aware that the accuracy of our OCR model could be improved.\
-     As such, this could be done by training a model based on the user input compared to the original image.')
+    st.markdown("<h3 style='text-align: center; color: #406144; font-weight: bold;'>About the future improvements</h3>", unsafe_allow_html=True)
+    st.write('OCR improvements: When our model returns unsatisfactory results, we recommend uploading a scanned clothing tag instead of a normal picture as well as simply retrying with another scan of the same tag, \
+        since this might greatly improve the image recognition results. Nevertheless we are aware that the performance of our OCR model could be improved by training a model \
+        based on this web app\'s user input.')
     st.write('Geolocalisation: If an item is made in Bangladesh for example and you are buying it in Portugal, it would not have the same \
     environmental impact as if you were buying it in Bangladesh. Therefore, integrating the added impact based on the location of \
     the buyer according to where the item was produced, could also be an interesting feature to add.')
     st.write('Additional features: Include a recommendation system of similar clothing items with a better sustainability and/or brand score.')
+    st.write('Finetune the sustainability scores: This web app is the culmination of an extremely fun and intense rollercoaster of a hard-working team of \
+        data science enthusiasts, trying to apply some of their newly acquired data visualisation and machine/deep learning techniques for a good cause. \
+        The project should be regarded in that respect. We did our utmost best to retrieve trustworthy data and represent the data used as truthfully as possible, \
+        but cannot be held liable for any mistakes in the data or malfunctioning or lack of future support of the app or the like. We acknowledge that sustainable fashion \
+        is multi-faceted, but given the short time span and the mere educational purpose of this project, we had to limit the scope.')
